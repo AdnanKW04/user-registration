@@ -1,3 +1,5 @@
+// require("dotenv").config();
+
 module.exports = {
   port: 4000,
   baseUrl: `http://192.168.31.238:4000/`,
