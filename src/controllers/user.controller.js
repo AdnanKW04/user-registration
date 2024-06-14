@@ -73,9 +73,11 @@ const verifyEmail = catchAsync(async (req, res) => {
     return res.status(httpStatus.OK).send(verificationTemplate.alreadyVerified);
   }
 
-  user.isVerified = true;
-  // user.verificationToken = null;
-  await user.save();
+  await commonService.update({
+    model: User,
+    body: { isVerified: true },
+    query: { verificationToken: token, isVerified: false, status: true },
+  });
 
   return res.status(httpStatus.OK).send(verificationTemplate.success);
 });
