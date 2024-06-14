@@ -7,7 +7,10 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const { generateFileUrl } = require("../utils/fileUpload");
-const { generateHtmlTemplate } = require("../constant/emailTemplate");
+const {
+  generateHtmlTemplate,
+  generateEmailVerificationHtmlTemplate,
+} = require("../constant/emailTemplate");
 
 const registerUser = catchAsync(async (req, res) => {
   const { name, email } = req.body;
@@ -55,20 +58,26 @@ const registerUser = catchAsync(async (req, res) => {
 const verifyEmail = catchAsync(async (req, res) => {
   const { token } = req.query;
 
+  const verificationTemplate = generateEmailVerificationHtmlTemplate();
+
   const user = await commonService.getOne({
     model: User,
-    query: { verificationToken: token, isVerified: false, status: true },
+    query: { verificationToken: token, status: true },
   });
 
   if (!user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid verification token");
+    return res.status(httpStatus.BAD_REQUEST).send(verificationTemplate.failed);
+  }
+
+  if (user && user.isVerified) {
+    return res.status(httpStatus.OK).send(verificationTemplate.alreadyVerified);
   }
 
   user.isVerified = true;
-  user.verificationToken = null;
+  // user.verificationToken = null;
   await user.save();
 
-  return res.status(httpStatus.OK).send("Email verified successfully");
+  return res.status(httpStatus.OK).send(verificationTemplate.success);
 });
 
 module.exports = { registerUser, verifyEmail };

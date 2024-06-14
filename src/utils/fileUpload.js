@@ -2,6 +2,7 @@ const fs = require("fs");
 const httpStatus = require("http-status");
 const path = require("path");
 const ApiError = require("./apiError");
+const { generateTimestamp } = require("./timeHelper");
 
 const generateFileUrl = async ({ files, returnArrayFileUrl = [] }) => {
   try {
@@ -11,13 +12,10 @@ const generateFileUrl = async ({ files, returnArrayFileUrl = [] }) => {
       Object.entries(files).map(async ([key, filesArray]) => {
         const uploadedUrls = await Promise.all(
           filesArray.map(async (file) => {
-            const uploadPath = path.join(
-              __dirname,
-              "../../uploads",
-              file.originalname
-            );
+            const fileName = `${generateTimestamp()}-${file.originalname}`;
+            const uploadPath = path.join(__dirname, "../../uploads", fileName);
             await fs.writeFileSync(uploadPath, file.buffer);
-            return `uploads/${file.originalname}`;
+            return `uploads/${fileName}`;
           })
         );
 
