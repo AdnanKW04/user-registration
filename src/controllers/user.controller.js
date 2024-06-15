@@ -35,7 +35,7 @@ const registerUser = catchAsync(async (req, res) => {
   const verificationToken = crypto.randomBytes(16).toString("hex");
 
   // Upload Profile Image
-  const fileUrls = await generateFileUrl({ files: req.files });
+  const fileUrls = req.files ? await generateFileUrl({ files: req.files }) : {};
 
   // Create New User
   await commonService.create({

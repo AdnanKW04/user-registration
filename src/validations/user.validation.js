@@ -7,6 +7,9 @@ const registerUser = {
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
+  files: Joi.object().keys({
+    profileImage: Joi.array().required().min(1).max(1),
+  }),
 };
 
 const userMedia = [{ name: "profileImage", maxCount: 1 }];
