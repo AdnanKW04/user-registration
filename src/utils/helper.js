@@ -1,11 +1,16 @@
 const httpStatus = require("http-status");
 const ApiError = require("./apiError");
 
-const catchAsync = (fn) => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch((err) =>
-    next(new ApiError(httpStatus.BAD_REQUEST, err.message))
-  );
+const catchAsync = (fn) => {
+  return (req, res, next) => {
+    Promise.resolve(fn(req, res, next)).catch((err) => next(err));
+  };
 };
+// const catchAsync = (fn) => (req, res, next) => {
+//   Promise.resolve(fn(req, res, next)).catch((err) =>
+//     next(new ApiError(httpStatus.BAD_REQUEST, err.message))
+//   );
+// };
 
 const pick = (object, keys) => {
   return keys.reduce((obj, key) => {

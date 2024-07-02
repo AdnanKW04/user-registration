@@ -10,3 +10,6 @@ venv/
 # Ignore logs and temporary files
 *.log
 *.tmp
+
+# Ignore environment variables file
+.env

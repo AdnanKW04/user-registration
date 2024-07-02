@@ -4,7 +4,7 @@ const { pick } = require("../utils/helper");
 const ApiError = require("../utils/apiError");
 
 const validate = (schema) => (req, res, next) => {
-  const validSchema = pick(schema, ["body", "query", "params", "files"]);
+  const validSchema = pick(schema, ["body", "query", "params"]);
   const reqObj = pick(req, Object.keys(validSchema));
 
   const { value, error } = Joi.compile(validSchema)

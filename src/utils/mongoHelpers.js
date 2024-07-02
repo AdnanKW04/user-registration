@@ -1,13 +1,21 @@
 const commonService = {
-  getOne: ({ model, query }) => {
-    return model.findOne(query);
+  create: async ({ model, body }) => {
+    return await model.create(body);
   },
-  create: ({ model, body }) => {
-    const schema = new model(body);
-    return schema.save();
+  bulkCreate: async ({ model, body }) => {
+    return await model.insertMany(body);
   },
-  update: ({ model, body, query }) => {
-    return model.findOneAndUpdate(query, body, { new: true });
+  getOne: async ({ model, query }) => {
+    return await model.findOne(query);
+  },
+  getMany: async ({ model, query }) => {
+    return await model.find(query);
+  },
+  update: async ({ model, body, query }) => {
+    return await model.updateMany(query, { $set: body });
+  },
+  destroy: async ({ model, query }) => {
+    return await model.deleteMany(query);
   },
 };
 

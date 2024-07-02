@@ -1,11 +1,11 @@
 const express = require("express");
 var bodyParser = require("body-parser");
-const routes = require("./src/routes");
+const routes = require("./routes");
 const path = require("path");
 const httpStatus = require("http-status");
-const ApiError = require("./src/utils/apiError");
-const { port } = require("./src/config/config");
-require("./src/models");
+const ApiError = require("./utils/apiError");
+const { port } = require("./config/config");
+require("./models");
 
 const app = express();
 
