@@ -6,11 +6,6 @@ const catchAsync = (fn) => {
     Promise.resolve(fn(req, res, next)).catch((err) => next(err));
   };
 };
-// const catchAsync = (fn) => (req, res, next) => {
-//   Promise.resolve(fn(req, res, next)).catch((err) =>
-//     next(new ApiError(httpStatus.BAD_REQUEST, err.message))
-//   );
-// };
 
 const pick = (object, keys) => {
   return keys.reduce((obj, key) => {

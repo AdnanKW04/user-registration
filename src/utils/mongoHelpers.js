@@ -1,3 +1,9 @@
+const createSearchQuery = ({ search, searchArr }) => {
+  return searchArr.map((searchCol) => ({
+    [searchCol]: { $regex: search, $options: "i" },
+  }));
+};
+
 const commonService = {
   create: async ({ model, body }) => {
     return await model.create(body);
@@ -8,7 +14,13 @@ const commonService = {
   getOne: async ({ model, query }) => {
     return await model.findOne(query);
   },
-  getMany: async ({ model, query }) => {
+  getMany: async ({ model, query, options }) => {
+    if (options.page && options.limit) {
+      const { limit, page } = options;
+      const offset = (page - 1) * limit;
+
+      return await model.find(query).limit(limit).skip(offset);
+    }
     return await model.find(query);
   },
   update: async ({ model, body, query }) => {
@@ -19,4 +31,4 @@ const commonService = {
   },
 };
 
-module.exports = { commonService };
+module.exports = { commonService, createSearchQuery };
